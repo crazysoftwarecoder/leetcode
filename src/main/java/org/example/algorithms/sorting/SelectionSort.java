@@ -1,7 +1,8 @@
 package org.example.algorithms.sorting;
 
-public class SelectionSort<T extends Comparable<T>> {
+public class SelectionSort<T extends Comparable<T>> implements Sorter<T> {
 
+    @Override
     public void sort(T[] arr) {
         if (arr.length < 2) return;
         for (int i=0;i<arr.length-1;i++) {

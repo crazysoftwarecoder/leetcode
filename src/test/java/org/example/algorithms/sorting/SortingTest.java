@@ -2,29 +2,36 @@ package org.example.algorithms.sorting;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Arrays;
 import java.util.Random;
+import java.util.stream.Stream;
 
-public class SelectionSortTest {
+public class SortingTest {
 
     private static Random random;
 
-    private static SelectionSort<Integer> selectionSort;
+    private static final Integer NUMBER_OF_ELEMENTS = 30000;
 
     @BeforeAll
     public static void setup() {
         random = new Random();
-        selectionSort = new SelectionSort();
     }
 
-    @Test
-    public void selectionSortTest() {
-        var arr = generateRandomArray(5);
+    @ParameterizedTest
+    @MethodSource("getSorters")
+    public void sortTest(Sorter<Integer> sorter) {
+        var arr = generateRandomArray(NUMBER_OF_ELEMENTS);
         var sortedArray = copyArray(arr);
         Arrays.sort(sortedArray);
-        selectionSort.sort(arr);
+        long currentTimeMillis = System.currentTimeMillis();
+        sorter.sort(arr);
+        System.out.println("Sorter : "
+                + sorter.getClass().getSimpleName() + " took "
+                + ((System.currentTimeMillis() - currentTimeMillis) / 1000)
+                + " secs" );
         Assertions.assertArrayEquals(arr, sortedArray);
     }
 
@@ -42,5 +49,9 @@ public class SelectionSortTest {
             arr[i] = random.nextInt();
         }
         return arr;
+    }
+
+    private static Stream<Sorter<Integer>> getSorters() {
+        return Stream.of(new BubbleSort<>(), new SelectionSort<>());
     }
 }
