@@ -17,10 +17,4 @@ public class BubbleSort<T extends Comparable<T>> implements Sorter<T> {
             if (!swapped) break; // bubble sort is complete if the entire array is in sorted order.
         }
     }
-
-    private void swap(T[] arr, int src, int dest) {
-        T tmp = arr[dest];
-        arr[dest] = arr[src];
-        arr[src] = tmp;
-    }
 }

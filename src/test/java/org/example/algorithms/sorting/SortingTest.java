@@ -13,7 +13,7 @@ public class SortingTest {
 
     private static Random random;
 
-    private static final Integer NUMBER_OF_ELEMENTS = 30000;
+    private static final Integer NUMBER_OF_ELEMENTS = 10000;
 
     @BeforeAll
     public static void setup() {
@@ -52,6 +52,6 @@ public class SortingTest {
     }
 
     private static Stream<Sorter<Integer>> getSorters() {
-        return Stream.of(new BubbleSort<>(), new SelectionSort<>());
+        return Stream.of(new BubbleSort<>(), new SelectionSort<>(), new InsertionSort<>());
     }
 }

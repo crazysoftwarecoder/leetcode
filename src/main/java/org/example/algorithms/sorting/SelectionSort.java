@@ -17,10 +17,4 @@ public class SelectionSort<T extends Comparable<T>> implements Sorter<T> {
             }
         }
     }
-
-    private void swap(T[] arr, int src, int dest) {
-        T tmp = arr[src];
-        arr[src] = arr[dest];
-        arr[dest] = tmp;
-    }
 }
