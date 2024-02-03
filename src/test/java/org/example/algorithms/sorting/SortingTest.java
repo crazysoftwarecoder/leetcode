@@ -52,6 +52,6 @@ public class SortingTest {
     }
 
     private static Stream<Sorter<Integer>> getSorters() {
-        return Stream.of(new BubbleSort<>(), new SelectionSort<>(), new InsertionSort<>(), new MergeSort<>(Integer.class));
+        return Stream.of(new BubbleSort<>(), new SelectionSort<>(), new InsertionSort<>(), new MergeSort<>(Integer.class), new QuickSort<>());
     }
 }
