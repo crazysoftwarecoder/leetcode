@@ -29,7 +29,7 @@ public class KMPPatternMatchAlgorithm {
     }
 
     public Result search(String str, String pat) {
-        var notFound = new Result(false, -1);
+        var notFound = Result.NOT_FOUND;
         if (pat == null) {
             return new Result(str == null, -1);
         }
@@ -38,22 +38,22 @@ public class KMPPatternMatchAlgorithm {
         if (str.length() == 0) return notFound;
 
         int[] kmpArr = getKMPArray(pat);
-        int i=0;
-        int j=0;
-        while ((i<str.length()) && (j<pat.length())) {
-            if (str.charAt(i) == pat.charAt(j)) {
-                i++;
-                j++;
-                if (j == pat.length()) {
-                    return new Result(true, i-j);
+        int strPtr=0;
+        int patPtr=0;
+        while ((strPtr<str.length()) && (patPtr<pat.length())) {
+            if (str.charAt(strPtr) == pat.charAt(patPtr)) {
+                strPtr++;
+                patPtr++;
+                if (patPtr == pat.length()) {
+                    return new Result(true, strPtr-patPtr);
                 }
             }
             else {
-                if (j==0) {
-                    i++;
+                if (patPtr==0) {
+                    strPtr++;
                 }
                 else {
-                    j = kmpArr[j-1];
+                    patPtr = kmpArr[patPtr-1];
                 }
             }
         }
@@ -64,6 +64,8 @@ public class KMPPatternMatchAlgorithm {
 class Result {
     boolean exists;
     int index;
+
+    static Result NOT_FOUND = new Result(false, -1);
 
     public Result(boolean exists, int index) {
         this.exists = exists;
