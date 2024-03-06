@@ -1,0 +1,18 @@
+
+
+
+Operations:
+
+    - Add a file into a collection addFile(file (mandatory), collectionName (optional))
+    - Long getBytesOfAllFilesStored()
+    - String[] collectionNames - topNCollections(int N)
+
+Map<String (Collection Name), ListOfFilesAndCollectionMetadata>
+Long totalSize;
+
+class ListOfFilesAndCollectionMetadata {
+
+    List<File> files;
+    Long totalSizeOfCollection;
+
+}
