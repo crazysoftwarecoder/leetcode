@@ -51,4 +51,25 @@ public class ConnectedFindTest {
         obj.union(5,6);
         assertTrue(obj.isConnected(0,9));
     }
+
+    @Test
+    public void testTwo() {
+        String binary = "1111111111111111111111111111111";
+        int integer = Integer.parseInt(binary, 2);
+        System.out.println(integer);
+        System.out.println(Integer.toBinaryString(integer >> 1));
+    }
+
+    @Test
+    public void testCase() {
+        String binaryString = "11111111111111111111111111111101";
+        int intValue = Integer.parseUnsignedInt(binaryString, 2);
+        if (binaryString.charAt(0) == '1') {
+            intValue = -((1 << binaryString.length()) - intValue);
+        }
+        System.out.println("Binary String: " + binaryString);
+        System.out.println(intValue);
+        System.out.println(Integer.toBinaryString(intValue >>> 31));
+
+    }
 }
