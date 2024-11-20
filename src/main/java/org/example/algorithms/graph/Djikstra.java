@@ -2,95 +2,74 @@ package org.example.algorithms.graph;
 
 import java.util.*;
 
-class Graph {
-
-    Map<String, List<Edge>> edges = new HashMap<>();
-
-    public void addEdge(String source, String destination, int weight) {
-        edges.putIfAbsent(source, new ArrayList<>());
-        edges.putIfAbsent(destination, new ArrayList<>());
-        edges.get(source).add(new Edge(destination, weight));
-    }
-
-    public List<Edge> neighbors(String nodeName) {
-        return edges.get(nodeName);
-    }
-}
-
-class TraversingNode {
-    String name;
-    int distance;
-
-    public TraversingNode(String name, int distance) {
-        this.name = name;
-        this.distance = distance;
-    }
-
-    @Override
-    public String toString() {
-        return "TraversingNode{" +
-                "name='" + name + '\'' +
-                ", distance=" + distance +
-                '}';
-    }
-}
-
-class Edge {
-    String destination;
-    int weight;
-
-    public Edge(String destination, int weight) {
-        this.destination = destination;
-        this.weight = weight;
-    }
-}
-
 public class Djikstra {
 
-    public Map<String,Integer> djikstra(Graph graph, String source) {
-        Map<String, Integer> distance = new HashMap<>();
-        Set<String> visitedNodes = new HashSet<>();
-        Queue<TraversingNode> queue = new PriorityQueue<>(Comparator.comparingInt(node -> node.distance));
+    // Edge class representing an edge from a source node to a target node with a given weight
+    static class Edge {
+        int targetNode;
+        int weight;
 
-        for (String node : graph.edges.keySet()) {
-            distance.put(node, Integer.MAX_VALUE);
+        public Edge(int targetNode, int weight) {
+            this.targetNode = targetNode;
+            this.weight = weight;
+        }
+    }
+
+    // Dijkstra's algorithm implementation
+    public static int[] dijkstra(Map<Integer, List<Edge>> graph, int source, int numNodes) {
+        int[] dist = new int[numNodes];
+        for (int i=0;i<dist.length;i++) {
+            dist[i] = Integer.MAX_VALUE;
         }
 
-        distance.put(source, 0);
-        queue.add(new TraversingNode(source, 0));
+        dist[source] = 0; // distance from source to source is zero.
 
-        while (!queue.isEmpty()) {
-            var node = queue.poll();
+        PriorityQueue<Integer> pq = new PriorityQueue<>(Comparator.comparingInt(node -> dist[node]));
+        pq.add(source);
 
-            if (visitedNodes.contains(node.name)) continue;
-            visitedNodes.add(node.name); // mark visited
+        while (!pq.isEmpty()) {
+            int currentNode = pq.poll();
 
-            for (Edge edge : graph.neighbors(node.name)) {
-                if (visitedNodes.contains(edge.destination)) continue; // skip if visited
+            if (!graph.containsKey(currentNode)) {
+                continue;
+            }
 
-                // calc dist
-                var dist = node.distance + edge.weight;
-                if (dist < distance.get(edge.destination)) {
-                    distance.put(edge.destination, dist);
-                    queue.add(new TraversingNode(edge.destination, dist));
+            for (var edge : graph.get(currentNode)) {
+                var targetNode = edge.targetNode;
+                var weight = edge.weight;
+
+                var newDist = dist[currentNode] + weight;
+
+                if (newDist < dist[targetNode]) {
+                    dist[targetNode] = newDist;
+                    pq.add(targetNode); 
                 }
             }
         }
 
-        return distance;
+        return dist;
     }
 
+    // Example usage
     public static void main(String[] args) {
-        Graph graph = new Graph();
-        graph.addEdge("A", "B", 1);
-        graph.addEdge("A", "C", 4);
-        graph.addEdge("B", "C", 2);
-        graph.addEdge("B", "D", 5);
-        graph.addEdge("C", "D", 1);
+        // Create a graph represented as an adjacency list
+        Map<Integer, List<Edge>> graph = new HashMap<>();
 
-        Map<String, Integer> distances = new Djikstra().djikstra(graph, "A");
-        for (String name : distances.keySet()) {
-            System.out.println(name + "->" + distances.get(name));
+        // Add edges to the graph (example graph)
+        graph.put(0, Arrays.asList(new Edge(1, 4), new Edge(2, 1)));
+        graph.put(1, Arrays.asList(new Edge(3, 1)));
+        graph.put(2, Arrays.asList(new Edge(1, 2), new Edge(3, 5)));
+        graph.put(3, Collections.emptyList());
+
+        int source = 0;      // Starting node
+        int numNodes = 4;    // Total number of nodes in the graph
+
+        // Run Dijkstra's algorithm
+        int[] distances = dijkstra(graph, source, numNodes);
+
+        // Print the shortest distances from the source to each node
+        for (int i = 0; i < distances.length; i++) {
+            System.out.println("Distance from node " + source + " to node " + i + " is " + distances[i]);
         }
     }
 }
