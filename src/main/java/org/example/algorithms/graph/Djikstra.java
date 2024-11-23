@@ -21,7 +21,6 @@ public class Djikstra {
         for (int i=0;i<dist.length;i++) {
             dist[i] = Integer.MAX_VALUE;
         }
-
         dist[source] = 0; // distance from source to source is zero.
 
         PriorityQueue<Integer> pq = new PriorityQueue<>(Comparator.comparingInt(node -> dist[node]));
@@ -42,7 +41,7 @@ public class Djikstra {
 
                 if (newDist < dist[targetNode]) {
                     dist[targetNode] = newDist;
-                    pq.add(targetNode); 
+                    pq.add(targetNode);
                 }
             }
         }
