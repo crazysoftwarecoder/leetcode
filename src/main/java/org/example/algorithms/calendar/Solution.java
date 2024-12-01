@@ -2,30 +2,42 @@ package org.example.algorithms.calendar;
 
 import java.util.*;
 
-public class Solution{
-    public static boolean validWordAbbreviation(String word, String abbr) {
-        int j = 0;
-        for (int i=0;i<abbr.length();i++) {
-            char ch = abbr.charAt(i);
-            if (Character.isDigit(ch)) {
-                int num = (int) (ch) - ('0');
-                while (Character.isDigit(abbr.charAt(i+1))) {
-                    ch = abbr.charAt(i+1);
-                    num *= 10;
-                    num += (int) (ch) - ('0');
-                    i++;
-                }
-                if (j + num >= word.length()) return false; // if num exceeds the rem length of the word.
-                j += num; // skip that many characters.
-            } else if (ch != word.charAt(j++)) {
-                return false;
+
+import java.util.*;
+
+class Solution {
+    public static int[][] mergeIntervals(int[][] intervals) {
+        if (intervals.length == 1) return intervals;
+
+        List<int[]> res = new ArrayList<>();
+        res.add(intervals[0]);
+        int resPtr = 1;
+        // [1, 5], [3, 7], [4, 6], [6, 8]
+        for (int i=1;i<intervals.length;i++) {
+            var currInterval = intervals[i];
+            var prevInterval = res.get(resPtr-1);
+            if (currInterval[0] <= prevInterval[0]) {
+                if (currInterval[1] <= prevInterval[1]) continue; // prev interval consumes currInterval
+                prevInterval[1] = currInterval[1]; // set prev last time to curr's last time
+                res.set(resPtr-1, prevInterval);
+            } else {
+                res.add(currInterval); // non overlapping interval.
+                resPtr++;
             }
         }
-        // Replace the following return statement with your code
-        return true;
+
+        intervals = new int[res.size()][2];
+        for (int i=0;i<res.size();i++) {
+            intervals[i] = res.get(i);
+        }
+
+        return intervals;
     }
 
     public static void main(String[] args) {
-        System.out.println(validWordAbbreviation("internationalization", "13iz4n"));
+        var intervals = mergeIntervals(new int[][]{new int[]{1,5}, new int[]{3,7}, new int[]{4,6}});
+        for (int[] interval : intervals) {
+            System.out.println(interval[0] + " " + interval[1]);
+        }
     }
 }

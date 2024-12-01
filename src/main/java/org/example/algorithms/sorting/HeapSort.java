@@ -1,38 +1,45 @@
 package org.example.algorithms.sorting;
 
-import java.util.AbstractMap;
 import java.util.Arrays;
 
 public class HeapSort<T extends Comparable<T>> implements Sorter<T> {
     @Override
     public void sort(T[] arr) {
-        for (int i=arr.length/2;i>=0;i--) {
-            _heapify(arr, i, arr.length);
+        int n = arr.length;
+
+        // Max heapify the array first.
+        for (int i=n/2-1;i>=0;i--) {
+            minHeapify(arr, n, i);
         }
-        for (int i=arr.length-1;i>=0;i--) {
+
+        // move root to edge and max heapify
+        for (int i=n-1;i>0;i--) {
             swap(arr, 0, i);
-            _heapify(arr, 0, i);
+            minHeapify(arr, i, 0);
+        }
+
+    }
+
+    private void minHeapify(T[] arr, int maxLen, int root) {
+        int largest = root;
+        int left = (root * 2) + 1;
+        int right = (root * 2) + 2;
+
+        if ( (left < maxLen) && (arr[left].compareTo(arr[largest]) < 0) ) {
+            largest = left;
+        }
+
+        if ( (right < maxLen) && (arr[right].compareTo(arr[largest])) < 0) {
+            largest = right;
+        }
+
+        if (largest != root) {
+            swap(arr, largest, root);
+
+            minHeapify(arr, maxLen, largest);
         }
     }
 
-    private void _heapify(T[] arr, int index, int length) {
-        int largest = index;
-        int leftIndex = (index * 2) + 1;
-        int rightIndex = (index * 2) + 2;
-
-        if ((leftIndex < length) && (arr[leftIndex].compareTo(arr[largest])) > 0) {
-            largest = leftIndex;
-        }
-
-        if ((rightIndex < length) && (arr[rightIndex].compareTo(arr[largest]) > 0)) {
-            largest = rightIndex;
-        }
-
-        if (largest != index) {
-            swap(arr, largest, index);
-            _heapify(arr, largest, length);
-        }
-    }
 
     @Override
     public void swap(T[] arr, int src, int dest) {
