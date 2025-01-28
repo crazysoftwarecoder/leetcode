@@ -1,5 +1,7 @@
 package org.example.algorithms.sorting;
 
+import java.util.Arrays;
+
 public class QuickSort<T extends Comparable<T>> implements Sorter<T> {
 
     @Override
@@ -35,5 +37,6 @@ public class QuickSort<T extends Comparable<T>> implements Sorter<T> {
         var qSort = new QuickSort<Integer>();
         Integer[] intArr = new Integer[] {10, 7, 8, 9, 1, 5};
         qSort.sort(intArr);
+        System.out.println(Arrays.toString(intArr));
     }
 }

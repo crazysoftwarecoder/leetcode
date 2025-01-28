@@ -1,45 +1,24 @@
 package org.example.algorithms.solutions;
 
 
-import java.util.HashMap;
-
 import java.util.*;
 
 class Solution {
-    public int[] productExceptSelf(int[] nums) {
-        int[] leftMultArr = new int[nums.length];
-        int[] rightMultArr = new int[nums.length];
-        int[] res = new int[nums.length];
-
-        for (int i=0;i<nums.length;i++) {
-            int leftIndex = i;
-            int rightIndex = nums.length-1-i;
-
-            if (leftIndex == 0) {
-                leftMultArr[leftIndex] = nums[leftIndex];
-            }
-            else {
-                leftMultArr[leftIndex] = leftMultArr[leftIndex-1] * nums[leftIndex];
-            }
-
-            if (rightIndex == nums.length-1) {
-                rightMultArr[rightIndex] = nums[rightIndex];
-            }
-            else {
-                rightMultArr[rightIndex] = rightMultArr[rightIndex+1] * nums[rightIndex];
+    public boolean increasingTriplet(int[] nums) {
+        int first = Integer.MAX_VALUE, second = Integer.MAX_VALUE;
+        for (int n : nums) {
+            if (n <= first) {
+                first = n;
+            } else if (n <= second) {
+                second = n;
+            } else {
+                return true;
             }
         }
-
-        res[0] = rightMultArr[1];
-        res[res.length-1] = leftMultArr[res.length-2];
-        for (int i=1;i<res.length-1;i++) {
-            res[i] = leftMultArr[i-1] * rightMultArr[i+1];
-        }
-        return res;
+        return false;
     }
 
     public static void main(String[] args) {
-        var soln = new Solution();
-        System.out.println(Arrays.toString(soln.productExceptSelf(new int[] {1,2,3,4})));
+        System.out.println(new Solution().increasingTriplet(new int[]{2,7,7,7,4,6}));
     }
 }

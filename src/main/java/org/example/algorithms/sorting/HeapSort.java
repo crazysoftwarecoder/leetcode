@@ -6,37 +6,36 @@ public class HeapSort<T extends Comparable<T>> implements Sorter<T> {
     @Override
     public void sort(T[] arr) {
         int n = arr.length;
-
-        // Max heapify the array first.
-        for (int i=n/2-1;i>=0;i--) {
-            minHeapify(arr, n, i);
+        if (n < 2) return;
+        for (int i=arr.length/2;i>=0;i--) {
+            maxHeapify(arr, n, i);
         }
 
-        // move root to edge and max heapify
         for (int i=n-1;i>0;i--) {
             swap(arr, 0, i);
-            minHeapify(arr, i, 0);
-        }
 
+            maxHeapify(arr, i, 0);
+        }
     }
 
-    private void minHeapify(T[] arr, int maxLen, int root) {
+    private void maxHeapify(T[] arr, int maxLen, int root) {
+
+        int leftChild = 2 * root + 1;
+        int rightChild = 2 * root + 2;
+
         int largest = root;
-        int left = (root * 2) + 1;
-        int right = (root * 2) + 2;
 
-        if ( (left < maxLen) && (arr[left].compareTo(arr[largest]) < 0) ) {
-            largest = left;
+        if (leftChild < maxLen && arr[largest].compareTo(arr[leftChild]) <= 0) {
+            largest = leftChild;
         }
 
-        if ( (right < maxLen) && (arr[right].compareTo(arr[largest])) < 0) {
-            largest = right;
+        if (rightChild < maxLen && arr[largest].compareTo(arr[rightChild]) <= 0) {
+            largest = rightChild;
         }
 
-        if (largest != root) {
-            swap(arr, largest, root);
-
-            minHeapify(arr, maxLen, largest);
+        if (root != largest) {
+            swap(arr, root, largest);
+            maxHeapify(arr, maxLen, largest);
         }
     }
 

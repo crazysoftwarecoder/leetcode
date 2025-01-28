@@ -14,50 +14,35 @@ public class MergeSort<T extends Comparable<T>> implements Sorter<T> {
     @Override
     public void sort(T[] arr) {
         if (arr.length < 2) return;
-        mergeSort(arr, 0, arr.length-1);
+
+        int mid = arr.length >>> 1;
+
+        T[] left = Arrays.copyOfRange(arr, 0, mid);
+        T[] right = Arrays.copyOfRange(arr, mid, arr.length);
+
+        sort(left);
+        sort(right);
+
+        merge(arr, left, right);
     }
 
-    private void mergeSort(T[] arr, int lo, int hiExclusive) {
-        if (lo < hiExclusive) {
-            int mid = (lo + hiExclusive) >>> 1;
-            mergeSort(arr, lo, mid);
-            mergeSort(arr, mid + 1, hiExclusive);
+    private void merge(T[] arr, T[] left, T[] right) {
+        int i = 0, j = 0, k = 0;
 
-            merge(arr, lo, mid, hiExclusive);
-        }
-    }
-
-    private void merge(T[] arr, int lo, int mid, int hi) {
-        T[] arr1 = (T[]) Array.newInstance(clazz, (mid-lo) + 1);
-        T[] arr2 = (T[]) Array.newInstance(clazz, (hi-mid));
-
-        for (int i=0;i<arr1.length;i++) {
-            arr1[i] = arr[lo+i];
-        }
-
-        for (int j=0;j<arr2.length;j++) {
-            arr2[j] = arr[mid+1+j];
-        }
-
-        int i = 0;
-        int j = 0;
-        int k = lo;
-
-        while (i<arr1.length && j<arr2.length) {
-            if (arr1[i].compareTo(arr2[j]) <= 0) {
-                arr[k++] = arr1[i++];
-            }
-            else {
-                arr[k++] = arr2[j++];
+        while ( (i < left.length) && (j < right.length) ) {
+            if (left[i].compareTo(right[j]) <= 0) {
+                arr[k++] = left[i++];
+            } else {
+                arr[k++] = right[j++];
             }
         }
 
-        while (i<arr1.length) {
-            arr[k++] = arr1[i++];
+        while (i < left.length) {
+            arr[k++] = left[i++];
         }
 
-        while (j<arr2.length) {
-            arr[k++] = arr2[j++];
+        while (j < right.length) {
+            arr[k++] = right[j++];
         }
     }
 }
