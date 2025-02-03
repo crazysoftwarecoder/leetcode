@@ -11,7 +11,7 @@ public class SlidingWindowRateLimiterTest {
 
     private RateLimiter rateLimiter;
 
-    private static final Duration DURATION = Duration.ofSeconds(5);
+    private static final Duration DURATION = Duration.ofSeconds(1);
 
     private static final Integer NO_OF_REQUESTS = 5;
 
