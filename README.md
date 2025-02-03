@@ -1,4 +1,4 @@
-[![CI](https://github.com/crazysoftwarecoder/leetcode/actions/workflows/ci.yml/badge.svg)](https://github.com/crazysoftwarecoder/leetcode/actions/workflows/ci.yml)
+[![CI](https://github.com/crazysoftwarecoder/leetcode/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/crazysoftwarecoder/leetcode/actions/workflows/ci.yml)
 
 # Leetcode
 
