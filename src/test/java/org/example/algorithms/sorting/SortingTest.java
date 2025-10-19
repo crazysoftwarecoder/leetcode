@@ -13,7 +13,7 @@ public class SortingTest {
 
     private static Random random;
 
-    private static final Integer NUMBER_OF_ELEMENTS = 5000;
+    private static final Integer NUMBER_OF_ELEMENTS = 50000;
 
     @BeforeAll
     public static void setup() {
