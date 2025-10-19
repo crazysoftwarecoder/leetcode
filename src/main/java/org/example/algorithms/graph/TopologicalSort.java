@@ -44,6 +44,44 @@ public class TopologicalSort<T> {
         return res;
     }
 
+    public List<T> topoSortBFS(Graph<T> graph) {
+        Map<T, Integer> indegree = new HashMap<>();
+
+        for (T vertex : graph.getVertices()) {
+            for (T neighbour : graph.getNeigbours(vertex)) {
+                indegree.put(neighbour, indegree.getOrDefault(neighbour, 0) + 1);
+            }
+            if (!indegree.containsKey(vertex)) {
+                indegree.put(vertex, 0);
+            }
+        }
+
+        Queue<T> q = new LinkedList<>();
+        for (T vertex : graph.getVertices()) {
+            if (indegree.get(vertex) == 0) {
+                q.offer(vertex);
+            }
+        }
+
+        List<T> sorted = new ArrayList<>();
+
+        while (!q.isEmpty()) {
+            T vertex = q.poll();
+
+            sorted.add(vertex);
+
+            for (T neighbour : graph.getNeigbours(vertex)) {
+                if (indegree.get(neighbour) == 0) continue;
+                indegree.put(neighbour, indegree.get(neighbour) - 1);
+                if (indegree.get(neighbour) == 0) {
+                    q.offer(neighbour);
+                }
+            }
+        }
+
+        return sorted;
+    }
+
     private void dfs(T vertex, Graph<T> graph, Stack<T> stack, Set<T> visited) {
         visited.add(vertex);
         if (graph.getNeigbours(vertex) == null) return;

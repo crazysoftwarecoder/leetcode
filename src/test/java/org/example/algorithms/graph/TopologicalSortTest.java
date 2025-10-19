@@ -21,5 +21,6 @@ public class TopologicalSortTest {
         graph.addEdge(3, 1);
 
         Assertions.assertEquals(sorter.topoSort(graph), List.of(5,4,2,3,1,0));
+        Assertions.assertEquals(sorter.topoSortBFS(graph), List.of(4, 5, 2, 0, 3, 1));
     }
 }
