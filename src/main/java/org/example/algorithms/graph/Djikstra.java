@@ -5,48 +5,45 @@ import java.util.*;
 public class Djikstra {
 
     // Edge class representing an edge from a source node to a target node with a given weight
-    static class Edge {
-        int targetNode;
-        int weight;
-
-        public Edge(int targetNode, int weight) {
-            this.targetNode = targetNode;
-            this.weight = weight;
-        }
-    }
+    record Edge(int targetNode, int weight) {}
 
     // Dijkstra's algorithm implementation
-    public static int[] dijkstra(Map<Integer, List<Edge>> graph, int source, int numNodes) {
-        int[] dist = new int[numNodes];
-        for (int i=0;i<dist.length;i++) {
-            dist[i] = Integer.MAX_VALUE;
-        }
-        dist[source] = 0; // distance from source to source is zero.
+    public static Map<Integer, Integer> dijkstra(Map<Integer, List<Edge>> graph, int source) {
+        Map<Integer, Integer> distMap = new HashMap<>();
 
-        PriorityQueue<Integer> pq = new PriorityQueue<>(Comparator.comparingInt(node -> dist[node]));
+        for (Map.Entry<Integer, List<Edge>> entry : graph.entrySet()) {
+            distMap.put(entry.getKey(), Integer.MAX_VALUE);
+            for (Edge edge : entry.getValue()) {
+                distMap.put(edge.targetNode, Integer.MAX_VALUE);
+            }
+        }
+
+        distMap.put(source, 0);
+
+        var pq = new PriorityQueue<Integer>(Comparator.comparingInt(distMap::get));
         pq.add(source);
 
         while (!pq.isEmpty()) {
-            int currentNode = pq.poll();
+            Integer currNode = pq.poll();
 
-            if (!graph.containsKey(currentNode)) {
+            if (!graph.containsKey(currNode)) {
                 continue;
             }
 
-            for (var edge : graph.get(currentNode)) {
-                var targetNode = edge.targetNode;
-                var weight = edge.weight;
+            for (Edge edge : graph.getOrDefault(currNode, Collections.emptyList())) {
+                var target = edge.targetNode();
+                var weight = edge.weight();
 
-                var newDist = dist[currentNode] + weight;
+                var currDist = distMap.get(currNode) + weight;
 
-                if (newDist < dist[targetNode]) {
-                    dist[targetNode] = newDist;
-                    pq.add(targetNode);
+                if (currDist < distMap.get(target)) {
+                    distMap.put(target, currDist);
+                    pq.offer(target);
                 }
             }
         }
 
-        return dist;
+        return distMap;
     }
 
     // Example usage
@@ -64,11 +61,11 @@ public class Djikstra {
         int numNodes = 4;    // Total number of nodes in the graph
 
         // Run Dijkstra's algorithm
-        int[] distances = dijkstra(graph, source, numNodes);
+        Map<Integer, Integer> distMap = dijkstra(graph, source);
 
         // Print the shortest distances from the source to each node
-        for (int i = 0; i < distances.length; i++) {
-            System.out.println("Distance from node " + source + " to node " + i + " is " + distances[i]);
+        for (Map.Entry<Integer, Integer> entry : distMap.entrySet()) {
+            System.out.println("Distance from node " + source + " to node " + entry.getKey() + " is " + entry.getValue());
         }
     }
 }
