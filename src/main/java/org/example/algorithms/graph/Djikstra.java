@@ -22,13 +22,12 @@ public class Djikstra {
 
         var pq = new PriorityQueue<Integer>(Comparator.comparingInt(distMap::get));
         pq.add(source);
+        Set<Integer> visited = new HashSet<>();
 
         while (!pq.isEmpty()) {
             Integer currNode = pq.poll();
 
-            if (!graph.containsKey(currNode)) {
-                continue;
-            }
+            if (!visited.add(currNode)) continue;
 
             for (Edge edge : graph.getOrDefault(currNode, Collections.emptyList())) {
                 var target = edge.targetNode();
@@ -59,6 +58,7 @@ public class Djikstra {
 
         int source = 0;      // Starting node
         int numNodes = 4;    // Total number of nodes in the graph
+
 
         // Run Dijkstra's algorithm
         Map<Integer, Integer> distMap = dijkstra(graph, source);
