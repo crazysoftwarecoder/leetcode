@@ -31,7 +31,8 @@ public class TopologicalSort<T> {
 
         for (var vertex : graph.getVertices()) {
             if (!visited.contains(vertex)) {
-                dfs(vertex, graph, stack, visited);
+                Set<T> inDFSStack = new HashSet<>();
+                dfs(vertex, graph, stack, inDFSStack, visited);
             }
         }
 
@@ -82,13 +83,16 @@ public class TopologicalSort<T> {
         return sorted;
     }
 
-    private void dfs(T vertex, Graph<T> graph, Stack<T> stack, Set<T> visited) {
+    private void dfs(T vertex, Graph<T> graph, Stack<T> stack, Set<T> inDFSStack, Set<T> visited) {
         visited.add(vertex);
+        inDFSStack.add(vertex);
         if (graph.getNeigbours(vertex) == null) return;
 
         for (T neighbour : graph.getNeigbours(vertex)) {
             if (!visited.contains(neighbour)) {
-                dfs(neighbour, graph, stack, visited);
+                dfs(neighbour, graph, stack, inDFSStack, visited);
+            } else if (inDFSStack.contains(neighbour)) {
+                throw new IllegalArgumentException("Input graph has a cycle");
             }
         }
 

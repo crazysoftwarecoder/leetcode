@@ -23,4 +23,17 @@ public class TopologicalSortTest {
         Assertions.assertEquals(sorter.topoSort(graph), List.of(5,4,2,3,1,0));
         Assertions.assertEquals(sorter.topoSortBFS(graph), List.of(4, 5, 2, 0, 3, 1));
     }
+
+    @Test
+    public void testCycleDetectionDFS() {
+        var sorter = new TopologicalSort<Integer>();
+        TopologicalSort.Graph<Integer> graph = new TopologicalSort.Graph<>();
+
+        // 1 -> 2 -> 3 -> 1 forms a cycle
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 1);
+
+        Assertions.assertThrows(IllegalArgumentException.class, () -> sorter.topoSort(graph));
+   }
 }
